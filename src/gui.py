@@ -4,11 +4,21 @@ import yaml
 import time, sv_ttk
 #from src.controller import controller
 #import processcodes
+games = []
+codes = []
+code_names = []
+current_game_index = 0
 
 def load_codes():
     with open('codes.yaml', 'r') as openfile:
-        return yaml.safe_load(openfile)['LSW']['codes']
-
+        config = yaml.safe_load(openfile)
+        for game in config:
+            try:  
+                games.append(config[game]['name'])
+                codes.append(config[game]['codes'])
+                code_names.append(config[game]['code_names'])
+            except:
+                print(f'Failed to load {game} from config.')
 
 class Options():
     def __init__(self, root, games):
@@ -16,11 +26,22 @@ class Options():
         self.options.pack(side=LEFT, fill=BOTH, expand=True)
         self.game = StringVar()
         self.game.set(games[0])
-        self.select_game = OptionMenu(self.options, self.game, games[0], *games)
+        self.select_game = OptionMenu(self.options, self.game, games[0], *games, command=self.switch_game)
         self.select_game.config(width=len(max(games, key=len)))
         self.select_game.pack(anchor=NW, padx=10, pady=10)
         self.start_btn = Button(self.options, text="Start")
-        self.start_btn.pack(anchor=SW, padx=10, pady=5) 
+        self.start_btn.pack(anchor=W, side = "bottom", padx=10, pady=5) 
+    
+    def set_codes(self, codes):
+        self.codes = codes
+
+    def switch_game(self, event):
+        index = games.index(event)
+        self.codes.destroy_contents()
+        self.codes.populate_with_list(code_names[index])
+        current_game_index = index
+        
+
 
 class ScrollableFrame(Frame):
     def __init__(self, parent):
@@ -47,30 +68,30 @@ class ScrollableFrame(Frame):
         self.canvas.configure(scrollregion=self.canvas.bbox("all"))
 
     def populate_with_list(self, list):
-        checkboxes = []
-        for index, item in enumerate(lego_star_wars_codes):
+        self.checkboxes = []
+        for index, item in enumerate(list):
             checked = IntVar()
-            checkboxes.append([checked])
-            checkboxes[index].append(Checkbutton(self.frame, text=item, variable=checkboxes[index][0]))
-            checkboxes[index][0].set(1)
-            checkboxes[index][1].pack(anchor=W)
-        return checkboxes
+            self.checkboxes.append([checked])
+            self.checkboxes[index].append(Checkbutton(self.frame, text=item, variable=self.checkboxes[index][0]))
+            self.checkboxes[index][0].set(1)
+            self.checkboxes[index][1].pack(anchor=W)
+        return self.checkboxes
     
     def destroy_contents(self):
         for widget in self.frame.winfo_children():
             widget.destroy()
 
 
-
 root = Tk()
+load_codes()
 sv_ttk.use_dark_theme()
 root.geometry("500x400")
 root.minsize(550, 300)
-
-options = Options(root, load_codes())    
+options = Options(root, games)    
 
 codes = ScrollableFrame(root)
+options.set_codes(codes)
 codes.pack(side=RIGHT, fill=BOTH, expand=True)
-#checkboxes = codes.populate_with_list(lego_star_wars_codes)
+checkboxes = codes.populate_with_list(code_names[0])
 
 root.mainloop()
