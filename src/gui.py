@@ -1,27 +1,15 @@
 from tkinter import *
 from tkinter.ttk import *
-import yaml, sv_ttk, threading
+import threading, sv_ttk
 from processcodes import process_codes
+from utility import *
 
 # from src.controller import controller
 # import processcodes
-games = []
-game_codes = []
-code_names = []
+games, game_codes, code_names = load_games()
 current_game_index = 0
 
-
-def load_codes():
-    with open("codes.yaml", "r") as openfile:
-        config = yaml.safe_load(openfile)
-        for game in config:
-            try:
-                games.append(config[game]["name"])
-                game_codes.append(config[game]["codes"])
-                code_names.append(config[game]["code_names"])
-            except:
-                print(f"Failed to load {game} from config.")
-
+print(games)
 
 class Options:
     def __init__(self, root, games):
@@ -29,7 +17,7 @@ class Options:
         self.options.pack(side=LEFT, fill=BOTH, expand=True)
         self.game = StringVar()
         self.select_game = OptionMenu(
-            self.options, self.game, *games, command=self.switch_game
+            self.options, self.game, games[0], *games, command=self.switch_game
         )
         self.select_game.config(width=len(max(games, key=len)))
         vcmd = self.options.register(self.check_delay)
@@ -49,6 +37,7 @@ class Options:
         self.codes = codes
 
     def switch_game(self, event):
+        global current_game_index
         index = games.index(event)
         self.codes.destroy_contents()
         self.codes.populate_with_list(code_names[index])
@@ -110,10 +99,10 @@ class ScrollableFrame(Frame):
 
 
 root = Tk()
-load_codes()
 sv_ttk.use_dark_theme()
 root.geometry("500x400")
 root.minsize(550, 300)
+print(games)
 options = Options(root, games)
 
 codes = ScrollableFrame(root)

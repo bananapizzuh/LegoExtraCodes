@@ -1,5 +1,11 @@
-import time, pydirectinput
-from utility import wait
+import time, platform
+from utility import *
+
+if platform.system().lower().startswith("win"):
+    import pydirectinput as pyag
+elif platform.system().lower().startswith("lin"):
+    import pyautogui as pyag
+
 
 code_order = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 code_order_reverse = "9876543210ZYXWVUTSRQPONMLKJIHGFEDCBA"
@@ -52,16 +58,16 @@ def get_hold_time(char, char_pos, last_code):
 def send_input(index, reverse, char_pos):
     if reverse:
         for i in range(index):
-            pydirectinput.press("s")
+            pyag.press("s")
     else:
         for i in range(index):
-            pydirectinput.press("w")
-    pydirectinput.press("d")
+            pyag.press("w")
+    pyag.press("d")
     if char_pos == 5:
-        pydirectinput.press("u")
-        pydirectinput.keyDown("a")
+        pyag.press("u")
+        pyag.keyDown("a")
         wait(1000)
-        pydirectinput.keyUp("a")
+        pyag.keyUp("a")
 
     time.sleep(10 / 60)
 
