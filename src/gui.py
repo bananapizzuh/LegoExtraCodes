@@ -42,7 +42,7 @@ class Options:
         current_game_index = index
 
     def start_processing(self):
-        process_codes(self.delay_time.getdouble(), game_codes[current_game_index])
+        process_codes(getdouble(self.delay_time.get()), game_codes[current_game_index])
 
     def check_delay(self, P):
         if str.isdigit(P) or P == "":

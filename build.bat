@@ -1,0 +1,1 @@
+pyinstaller --onefile --collect-data sv_ttk --clean src/gui.py
