@@ -4,8 +4,6 @@ import threading, sv_ttk
 from processcodes import process_codes
 from utility import *
 
-# from src.controller import controller
-# import processcodes
 games, game_codes, code_names = load_games()
 current_game_index = 0
 
@@ -44,11 +42,7 @@ class Options:
         current_game_index = index
 
     def start_processing(self):
-        self.process_thread = threading.Thread(
-            target=process_codes,
-            args=[self.delay_time.get(), game_codes[current_game_index]],
-        )
-        self.process_thread.start()
+        process_codes(self.delay_time.getdouble(), game_codes[current_game_index])
 
     def check_delay(self, P):
         if str.isdigit(P) or P == "":
@@ -96,7 +90,6 @@ class ScrollableFrame(Frame):
     def destroy_contents(self):
         for widget in self.frame.winfo_children():
             widget.destroy()
-
 
 root = Tk()
 sv_ttk.use_dark_theme()
