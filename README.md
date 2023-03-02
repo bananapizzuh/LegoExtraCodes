@@ -5,3 +5,5 @@ This is a W.I.P program to automate the process of putting in the extra unlock c
 Download the executable from the releases page. Once you click the start button in the application, you have whatever your delay time is to switch back to the game.  
 You should be in the location to enter codes.  
 ![Lego Star Wars: TCS](https://raw.githubusercontent.com/bananapizzuh/LegoExtraCodes/main/res/tcs-code-location.jpg)
+
+You can also run the application as a command line interface. do -help if you would like to use that version.

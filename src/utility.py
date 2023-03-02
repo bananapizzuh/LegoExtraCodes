@@ -1,4 +1,4 @@
-import os, time, yaml, requests
+import os, time, yaml, requests, semantic_version
 
 config = {}
 
@@ -47,7 +47,7 @@ def load_config():
 
 def update():
     load_config()
-    current_version = config["version"]
+    current_version = semantic_version.Version(config["version"])
     try:
         response = requests.get(
             "https://raw.githubusercontent.com/bananapizzuh/LegoExtraCodes/main/src/config.yaml"
