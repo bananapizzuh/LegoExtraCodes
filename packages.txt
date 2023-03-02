@@ -1,0 +1,2 @@
+rich-click==1.6.1
+sv_ttk

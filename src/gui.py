@@ -1,13 +1,12 @@
 from tkinter import *
 from tkinter.ttk import *
-import threading, sv_ttk
+import sv_ttk
 from processcodes import process_codes
 from utility import *
 
-games, game_codes, code_names = load_games()
+games, game_codes, code_names, void = load_games()
 current_game_index = 0
 
-print(games)
 
 class Options:
     def __init__(self, root, games):
@@ -91,11 +90,11 @@ class ScrollableFrame(Frame):
         for widget in self.frame.winfo_children():
             widget.destroy()
 
+
 root = Tk()
 sv_ttk.use_dark_theme()
 root.geometry("500x400")
 root.minsize(550, 300)
-print(games)
 options = Options(root, games)
 
 codes = ScrollableFrame(root)

@@ -1,4 +1,4 @@
-import time, yaml, requests
+import os, time, yaml, requests
 
 config = {}
 
@@ -26,11 +26,20 @@ def load_games():
             code_names.append(config["games"][game]["code_names"])
         except:
             print(f"Failed to load {game} from config.")
-    return games, game_codes, code_names
+    return games, game_codes, code_names, config["games"]
 
 
 def load_config():
     global config
+
+    if not os.path.isfile("config.yaml"):
+        with open("config.yaml", "w") as f:
+            f.write(
+                requests.get(
+                    "https://raw.githubusercontent.com/bananapizzuh/LegoExtraCodes/main/src/config.yaml"
+                ).text
+            )
+            print("fr")
     with open("config.yaml", "r") as openfile:
         config = yaml.safe_load(openfile)
     # print(config)
